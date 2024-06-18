@@ -1,27 +1,18 @@
-name: preview
+name: EAS Build
 
 on:
-  pull_request:
+  workflow_dispatch:
+  push:
     branches:
-      - develop
       - main
-      - "release/*"
+      - develop
 
 jobs:
-  update:
-    name: EAS Update
+  build:
+    name: Install and build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - name: Check for EXPO_TOKEN
-        run: |
-          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
-            exit 1
-          fi
 
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -29,25 +20,39 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
-          cache: yarn
+          cache: npm
 
-      - name: Setup EAS
+      - name: Setup Expo and EAS
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install dependencies
-        run: yarn install
+        run: npm ci
 
-      - name: Create preview for QA
-        if: github.event.pull_request.base.ref == 'develop' || startsWith(github.event.pull_request.base.ref, 'release/')
-        uses: expo/expo-github-action/preview@v8
-        with:
-          command: APP_VARIANT=qa eas update --auto
+      - name: Set up environment for develop
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          echo "API_URL=${{ secrets.DEVELOP_API_URL }}" >> .env
+        env:
+          APP_VARIANT: qa
 
-      - name: Create preview for Production
-        if: github.event.pull_request.base.ref == 'main'
-        uses: expo/expo-github-action/preview@v8
-        with:
-          command: APP_VARIANT=prod eas update --auto
+      - name: Set up environment for main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "API_URL=${{ secrets.PRODUCTION_API_URL }}" >> .env
+        env:
+          APP_VARIANT: prod
+
+      - name: Build on EAS for develop
+        if: github.ref == 'refs/heads/develop'
+        run: eas build --platform all --profile develop --non-interactive --no-wait
+        env:
+          APP_VARIANT: qa
+
+      - name: Build on EAS for main
+        if: github.ref == 'refs/heads/main'
+        run: eas build --platform all --profile production --non-interactive --no-wait
+        env:
+          APP_VARIANT: prod
