@@ -31,20 +31,28 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Set up environment for qa
+      - name: Set up environment for develop
         if: github.ref == 'refs/heads/develop'
         run: |
-          echo "API_URL=${{ secrets.QA_API_URL }}" >> .env
+          echo "API_URL=${{ secrets.DEVELOP_API_URL }}" >> .env
+        env:
+          APP_VARIANT: qa
 
       - name: Set up environment for main
         if: github.ref == 'refs/heads/main'
         run: |
           echo "API_URL=${{ secrets.PRODUCTION_API_URL }}" >> .env
+        env:
+          APP_VARIANT: prod
 
       - name: Build on EAS for develop
         if: github.ref == 'refs/heads/develop'
         run: eas build --platform all --profile develop --non-interactive --no-wait
+        env:
+          APP_VARIANT: qa
 
       - name: Build on EAS for main
         if: github.ref == 'refs/heads/main'
         run: eas build --platform all --profile production --non-interactive --no-wait
+        env:
+          APP_VARIANT: prod
