@@ -5,20 +5,15 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal",
-      "owner": "jesusebzcp"
+      "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal",
-      "owner": "jesusebzcp"
+      "distribution": "internal"
     },
     "production": {
-      "owner": "jesusebzcp"
     }
   },
   "submit": {
-    "production": {
-      "owner": "jesusebzcp"
-    }
+    "production": {    }
   }
 }
