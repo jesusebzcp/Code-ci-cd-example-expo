@@ -45,4 +45,7 @@ const defaultConfig: ExpoConfig = {
   },
 };
 
-export default ({ config }: ConfigContext): ExpoConfig => defaultConfig;
+export default ({ config }: ConfigContext): ExpoConfig => ({
+  ...config,
+  ...defaultConfig,
+});
