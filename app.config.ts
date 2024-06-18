@@ -5,6 +5,7 @@ const IS_QA = process.env.APP_VARIANT === "qa";
 const defaultConfig: ExpoConfig = {
   name: "CodemagicSample",
   slug: "CodemagicSample",
+  owner: "jesusebzcp",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
