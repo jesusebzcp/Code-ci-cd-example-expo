@@ -1,25 +1,50 @@
 name: EAS Build
+
 on:
   workflow_dispatch:
   push:
     branches:
+      - main
       - develop
+
 jobs:
   build:
     name: Install and build
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 18.x
           cache: npm
+
       - name: Setup Expo and EAS
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
+
       - name: Install dependencies
         run: npm ci
-      - name: Build on EAS
-        run: eas build --platform all --non-interactive --no-wait
+
+      - name: Set up environment for qa
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          echo "API_URL=${{ secrets.QA_API_URL }}" >> .env
+
+      - name: Set up environment for main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "API_URL=${{ secrets.PRODUCTION_API_URL }}" >> .env
+
+      - name: Build on EAS for develop
+        if: github.ref == 'refs/heads/develop'
+        run: eas build --platform all --profile develop --non-interactive --no-wait
+
+      - name: Build on EAS for main
+        if: github.ref == 'refs/heads/main'
+        run: eas build --platform all --profile production --non-interactive --no-wait
