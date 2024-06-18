@@ -1,0 +1,28 @@
+{
+  "cli": {
+    "version": ">= 9.2.0"
+  },
+  "builds": {
+    "android": {
+      "release": {
+        "workflow": "managed"
+      },
+      "qa": {
+        "workflow": "managed",
+        "releaseChannel": "qa"
+      }
+    },
+    "ios": {
+      "release": {
+        "workflow": "managed"
+      },
+      "qa": {
+        "workflow": "managed",
+        "releaseChannel": "qa"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

@@ -1,0 +1,68 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-qa:
+    if: github.ref == 'refs/heads/develop'
+    name: Build QA
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Log in to Expo
+        run: npx expo login -u ${{ secrets.EXPO_USERNAME }} -p ${{ secrets.EXPO_PASSWORD }}
+
+      - name: Install Expo CLI
+        run: npm install -g eas-cli
+
+      - name: Set QA Environment
+        run: echo "API_URL=https://api-qa.example.com\nENVIRONMENT=qa" > .env
+
+      - name: Run EAS Build for QA
+        run: dotenv -e .env eas build --profile qa --platform all
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+  build-prod:
+    if: github.ref == 'refs/heads/main'
+    name: Build Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Log in to Expo
+        run: npx expo login -u ${{ secrets.EXPO_USERNAME }} -p ${{ secrets.EXPO_PASSWORD }}
+
+      - name: Install Expo CLI
+        run: npm install -g eas-cli
+
+      - name: Set Production Environment
+        run: echo "API_URL=https://api.example.com\nENVIRONMENT=prod" > .env
+
+      - name: Run EAS Build for Production
+        run: dotenv -e .env eas build --profile release --platform all
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
