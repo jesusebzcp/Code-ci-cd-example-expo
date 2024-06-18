@@ -1,8 +1,6 @@
-import { ExpoConfig, ConfigContext } from "expo/config";
-
 const IS_QA = process.env.APP_VARIANT === "qa";
 
-const defaultConfig: ExpoConfig = {
+const defaultConfig = {
   name: "CodemagicSample",
   slug: "CodemagicSample",
   owner: "jesusebzcp",
@@ -46,7 +44,7 @@ const defaultConfig: ExpoConfig = {
   },
 };
 
-export default ({ config }: ConfigContext): ExpoConfig => ({
+export default ({ config }) => ({
   ...config,
   ...defaultConfig,
 });
