@@ -2,6 +2,7 @@
   "cli": {
     "version": ">= 9.2.0"
   },
+  "owner": "jesusebzcp",
   "build": {
     "development": {
       "developmentClient": true,
@@ -10,10 +11,9 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {
-    }
+    "production": {}
   },
   "submit": {
-    "production": {    }
+    "production": {}
   }
 }
