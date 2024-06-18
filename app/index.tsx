@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
-import { ENVIRONMENT } from "@env";
+import { APP_VARIANT } from "@env";
 
 export default function Page() {
-  console.log(`ENVIRONMENT: ${ENVIRONMENT}`);
+  console.log(`ENVIRONMENT: ${APP_VARIANT}`);
 
   return (
     <View style={styles.container}>
       <View style={styles.main}>
-        <Text style={styles.title}>Hello {ENVIRONMENT}</Text>
+        <Text style={styles.title}>Hello {APP_VARIANT}</Text>
         <Text style={styles.subtitle}>This is the first page of your app.</Text>
       </View>
     </View>

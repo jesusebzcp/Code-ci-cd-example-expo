@@ -3,8 +3,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "version": "1.0.0",
   "scripts": {
-    "dev": "APP_VARIANT=development npx expo start",
-    "start": "expo start",
+    "start:qa": "APP_VARIANT=qa npx expo start --clear",
+    "start": "npx expo start --clear",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
