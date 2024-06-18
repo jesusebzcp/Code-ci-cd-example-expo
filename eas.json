@@ -2,25 +2,15 @@
   "cli": {
     "version": ">= 9.2.0"
   },
-  "builds": {
-    "android": {
-      "release": {
-        "workflow": "managed"
-      },
-      "qa": {
-        "workflow": "managed",
-        "releaseChannel": "qa"
-      }
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
     },
-    "ios": {
-      "release": {
-        "workflow": "managed"
-      },
-      "qa": {
-        "workflow": "managed",
-        "releaseChannel": "qa"
-      }
-    }
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {}
   },
   "submit": {
     "production": {}
